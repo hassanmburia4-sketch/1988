@@ -1,6 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-// Navigation Component
+const IMAGES = {
+  hero1: 'https://image.qwenlm.ai/generated-images/103248a1-2323-4463-a7e4-0c4e40fa6f0a/_result.png',
+  hero2: 'https://image.qwenlm.ai/generated-images/9ceed87b-2092-4935-a8a3-5385e89c64aa/_result.png',
+  hero3: 'https://image.qwenlm.ai/generated-images/834cee5f-754e-478f-9db8-45fe462cc3cd/_result.png',
+  directing: 'https://image.qwenlm.ai/generated-images/beb2b0b6-897d-47af-936f-f5e476ef3a0f/_result.png',
+  aerial: 'https://image.qwenlm.ai/generated-images/d63c85f4-1449-418e-85b6-8fee71a6b2e3/_result.png',
+  student: 'https://image.qwenlm.ai/generated-images/8e32654c-9a8f-4735-b262-8076d07d91fd/_result.png',
+};
+
+// Animated Counter Hook
+function useCounter(end: number, duration: number = 2000, prefix: string = '', suffix: string = '') {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    let start = 0;
+    const increment = end / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) { setCount(end); clearInterval(timer); }
+      else setCount(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isVisible, end, duration]);
+
+  return { count, ref, prefix, suffix };
+}
+
+// Navbar
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -12,27 +51,26 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0A0A0F]/95 backdrop-blur-md shadow-lg shadow-black/20' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4A843] to-[#F0D078] flex items-center justify-center">
-            <span className="text-black font-bold text-lg">K</span>
+        <a href="#" className="flex items-center gap-2">
+          <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">K</span>
           </div>
-          <span className="font-playfair text-2xl font-bold tracking-wide">KAKA</span>
+          <span className="font-bold text-lg tracking-tight">KAKA</span>
         </a>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#about" className="text-sm font-medium text-gray-300 hover:text-[#D4A843] transition-colors">About</a>
-          <a href="#programs" className="text-sm font-medium text-gray-300 hover:text-[#D4A843] transition-colors">Programs</a>
-          <a href="#impact" className="text-sm font-medium text-gray-300 hover:text-[#D4A843] transition-colors">Impact</a>
-          <a href="#voices" className="text-sm font-medium text-gray-300 hover:text-[#D4A843] transition-colors">Voices</a>
-          <a href="#faculty" className="text-sm font-medium text-gray-300 hover:text-[#D4A843] transition-colors">Faculty</a>
-          <a href="#apply" className="px-6 py-2.5 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-semibold rounded-full text-sm hover:shadow-lg hover:shadow-[#D4A843]/30 transition-all">
-            Apply Now
+          <a href="#courses" className="text-sm font-medium text-gray-700 hover:text-black transition-colors">Courses</a>
+          <a href="#gallery" className="text-sm font-medium text-gray-700 hover:text-black transition-colors">Student Work</a>
+          <a href="#features" className="text-sm font-medium text-gray-700 hover:text-black transition-colors">Why Kaka</a>
+          <a href="#pricing" className="text-sm font-medium text-gray-700 hover:text-black transition-colors">Pricing</a>
+          <a href="#apply" className="px-5 py-2.5 bg-black text-white font-semibold rounded-full text-sm hover:bg-gray-800 transition-all">
+            Join Now
           </a>
         </div>
 
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-white">
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-black">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -44,14 +82,13 @@ function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden bg-[#0A0A0F]/98 backdrop-blur-md border-t border-white/10 px-6 py-5">
+        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-5">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
-            <a href="#about" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">About</a>
-            <a href="#programs" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Programs</a>
-            <a href="#impact" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Impact</a>
-            <a href="#voices" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Voices</a>
-            <a href="#faculty" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Faculty</a>
-            <a href="#apply" className="px-5 py-2 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-semibold rounded-full text-sm whitespace-nowrap">Apply Now</a>
+            <a href="#courses" onClick={() => setMobileOpen(false)} className="text-sm text-gray-700 hover:text-black">Courses</a>
+            <a href="#gallery" onClick={() => setMobileOpen(false)} className="text-sm text-gray-700 hover:text-black">Student Work</a>
+            <a href="#features" onClick={() => setMobileOpen(false)} className="text-sm text-gray-700 hover:text-black">Why Kaka</a>
+            <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-sm text-gray-700 hover:text-black">Pricing</a>
+            <a href="#apply" className="px-5 py-2 bg-black text-white font-semibold rounded-full text-sm">Join Now</a>
           </div>
         </div>
       )}
@@ -59,136 +96,95 @@ function Navbar() {
   );
 }
 
-// Hero Section
+// Hero with image carousel
 function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = [IMAGES.hero1, IMAGES.hero2, IMAGES.hero3];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden film-grain">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0F] via-[#1A1A2E] to-[#0A0A0F]"></div>
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#D4A843]/20 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#D4A843]/10 rounded-full blur-[120px]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D4A843]/5 rounded-full blur-[150px]"></div>
-      </div>
-
-      {/* Film strip decorations */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 opacity-10 hidden lg:block">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="w-8 h-6 border border-[#D4A843] mx-auto mb-4 rounded-sm"></div>
-        ))}
-      </div>
-      <div className="absolute right-0 top-0 bottom-0 w-16 opacity-10 hidden lg:block">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="w-8 h-6 border border-[#D4A843] mx-auto mb-4 rounded-sm"></div>
-        ))}
-      </div>
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <div className="animate-fade-in-up">
-          <p className="text-[#D4A843] font-medium tracking-[0.3em] uppercase text-sm mb-6">
-            Empowering Lives Through Film
-          </p>
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Background images */}
+      {slides.map((slide, i) => (
+        <div
+          key={i}
+          className={`absolute inset-0 transition-opacity duration-1000 ${i === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+        >
+          <img src={slide} alt="" className="w-full h-full object-cover" />
         </div>
+      ))}
 
-        <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-8 animate-fade-in-up delay-200">
-          Empower<br />
-          <span className="gold-gradient-text">Your Life.</span><br />
-          Tell Your Story.
-        </h1>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20"></div>
 
-        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-300 leading-relaxed">
-          Kaka Film Academy is more than a school — it's a movement. We empower lives by giving every aspiring filmmaker the tools, mentorship, and confidence to turn their vision into reality.
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+        <p className="text-white/80 text-sm tracking-[0.3em] uppercase mb-4 animate-fade-in-up">
+          Empowering Lives Through Film
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400">
-          <a href="#apply" className="px-8 py-4 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-bold rounded-full text-lg hover:shadow-xl hover:shadow-[#D4A843]/30 transition-all animate-pulse-gold">
-            Begin Your Journey
+        <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6 animate-fade-in-up delay-200">
+          Make Films.<br />Change Lives.
+        </h1>
+        <p className="text-white/80 text-lg md:text-xl max-w-xl mb-10 animate-fade-in-up delay-300">
+          The world's most empowering film academy. Learn to tell stories that matter — no experience needed.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-400">
+          <a href="#courses" className="px-8 py-4 bg-white text-black font-bold rounded-full text-base hover:bg-gray-100 transition-all">
+            Explore Courses
           </a>
-          <a href="#about" className="px-8 py-4 border-2 border-[#D4A843]/50 text-[#D4A843] font-semibold rounded-full text-lg hover:bg-[#D4A843]/10 transition-all">
-            Watch Our Story
+          <a href="#apply" className="px-8 py-4 border-2 border-white/60 text-white font-semibold rounded-full text-base hover:bg-white/10 transition-all">
+            Join Waitlist
           </a>
         </div>
 
-        {/* Stats bar */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-up delay-500">
-          {[
-            { number: '2,500+', label: 'Filmmakers Empowered' },
-            { number: '180+', label: 'Films Produced' },
-            { number: '45', label: 'Countries Represented' },
-            { number: '92%', label: 'Career Placement' },
-          ].map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-[#D4A843]">{stat.number}</div>
-              <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
-            </div>
+        {/* Slide indicators */}
+        <div className="absolute bottom-10 flex gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`w-2 h-2 rounded-full transition-all ${i === currentSlide ? 'bg-white w-8' : 'bg-white/40'}`}
+            />
           ))}
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
-        <div className="w-6 h-10 border-2 border-[#D4A843]/50 rounded-full flex justify-center pt-2">
-          <div className="w-1.5 h-3 bg-[#D4A843] rounded-full animate-bounce"></div>
-        </div>
-      </div>
     </section>
   );
 }
 
-// About / Mission Section
-function About() {
+// "Even if you / We'll help you" Section
+function EvenIf() {
   return (
-    <section id="about" className="py-24 md:py-32 relative">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+    <section className="py-20 md:py-28 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
           <div>
-            <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Our Mission</p>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Empowering Lives, <span className="gold-gradient-text">One Story</span> at a Time
-            </h2>
-            <p className="text-gray-400 text-lg leading-relaxed mb-6">
-              At Kaka Film Academy, we believe filmmaking has the power to transform lives — both the lives of those who create and those who watch. We exist to unlock that power in everyone.
-            </p>
-            <p className="text-gray-400 text-lg leading-relaxed mb-8">
-              Through world-class education, hands-on mentorship, and unwavering support, we empower individuals from all walks of life to discover their voice, build their confidence, and create films that make a difference.
-            </p>
-            <div className="space-y-4">
-              {[
-                'Life-changing scholarships — financial barriers eliminated',
-                'Personal mentors paired with every student',
-                'State-of-the-art equipment access from day one',
-                'A global community that empowers and uplifts',
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#D4A843]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg className="w-3.5 h-3.5 text-[#D4A843]" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <span className="text-gray-300">{item}</span>
-                </div>
+            <h3 className="text-2xl md:text-3xl font-bold mb-6">Even if you...</h3>
+            <ul className="space-y-4">
+              {['have never made a film before', 'don\'t own expensive equipment', 'don\'t have a lot of time', 'feel like your story doesn\'t matter'].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="text-gray-400 text-lg">—</span>
+                  <span className="text-gray-700 text-lg">{item}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-
-          <div className="relative">
-            <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-[#1A1A2E] to-[#14141F] border border-[#D4A843]/20 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="text-6xl mb-4">🎬</div>
-                  <p className="font-playfair text-2xl font-bold text-[#D4A843] mb-2">"Empowering Lives"</p>
-                  <p className="text-gray-500 text-sm">— Kaka Film Academy</p>
-                </div>
-              </div>
-              {/* Decorative elements */}
-              <div className="absolute top-4 right-4 w-20 h-20 border border-[#D4A843]/30 rounded-full"></div>
-              <div className="absolute bottom-4 left-4 w-12 h-12 border border-[#D4A843]/20 rounded-full"></div>
-            </div>
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black px-6 py-3 rounded-xl font-bold shadow-xl">
-              Est. 2018
-            </div>
+          <div>
+            <h3 className="text-2xl md:text-3xl font-bold mb-6">We'll help you...</h3>
+            <ul className="space-y-4">
+              {['find a powerful story in your community', 'make it with the equipment you have', 'get it released to a real audience', 'build a life empowered by your craft'].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="text-black font-bold text-lg">✓</span>
+                  <span className="text-gray-900 text-lg font-medium">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -196,216 +192,120 @@ function About() {
   );
 }
 
-// Programs Section
-function Programs() {
-  const programs = [
+// Stats Section
+function Stats() {
+  const stat1 = useCounter(220, 2000);
+  const stat2 = useCounter(12, 2000);
+  const stat3 = useCounter(980, 2000);
+
+  return (
+    <section className="py-16 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-3 gap-8 text-center">
+          <div ref={stat1.ref}>
+            <div className="text-4xl md:text-6xl font-bold text-black">+{stat1.count}</div>
+            <p className="text-gray-500 text-sm mt-2">Completed Films</p>
+          </div>
+          <div ref={stat2.ref}>
+            <div className="text-4xl md:text-6xl font-bold text-black">${stat2.count}M</div>
+            <p className="text-gray-500 text-sm mt-2">In Student Contracts</p>
+          </div>
+          <div ref={stat3.ref}>
+            <div className="text-4xl md:text-6xl font-bold text-black">+{stat3.count}</div>
+            <p className="text-gray-500 text-sm mt-2">Festival Selections</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Courses Section
+function Courses() {
+  const courses = [
     {
-      icon: '🎥',
-      title: 'Directing & Storytelling',
-      duration: '12 Months',
-      description: 'Master the art of visual storytelling. From screenplay to final cut, learn to direct with purpose and power.',
-      features: ['Screenwriting fundamentals', 'Visual storytelling techniques', 'Actor direction', 'Post-production workflow'],
+      category: 'Directing',
+      title: 'Documentary Foundations',
+      description: 'A step-by-step guide to finishing a film. From finding a story to getting into film festivals.',
+      features: ['No big budget required', 'Complete your first film', 'Release it to an audience', 'Use the gear you have'],
+      price: '$299',
+      image: IMAGES.directing,
     },
     {
-      icon: '📹',
-      title: 'Cinematography',
-      duration: '9 Months',
-      description: 'Learn to paint with light. Master camera operation, lighting design, and visual composition.',
-      features: ['Camera mastery', 'Lighting design', 'Color theory', 'Visual composition'],
+      category: 'Directing',
+      title: 'Advanced Documentary',
+      description: 'Get insider access to making acclaimed films and mastering the art of storytelling.',
+      features: ['Make your breakthrough film', 'Assemble your team', 'Work with a larger budget', 'Find your voice'],
+      price: '$449',
+      image: IMAGES.aerial,
     },
     {
-      icon: '🎙️',
-      title: 'Documentary Filmmaking',
-      duration: '10 Months',
-      description: 'Tell real stories that create real change. Learn investigative and narrative documentary techniques.',
-      features: ['Investigative research', 'Interview techniques', 'Ethical storytelling', 'Festival strategy'],
+      category: 'Cinematography',
+      title: 'The Cinematic Eye',
+      description: 'The complete guide to crafting stunning visuals and impactful visual stories.',
+      features: ['Elevate your cinematography', 'Basic to advanced lighting', 'Confidence in any environment', 'Master color grading'],
+      price: '$399',
+      image: IMAGES.student,
     },
     {
-      icon: '✂️',
-      title: 'Editing & Post-Production',
-      duration: '8 Months',
-      description: 'Where the magic happens. Master the craft of editing, sound design, and color grading.',
-      features: ['Non-linear editing', 'Sound design', 'Color grading', 'VFX basics'],
+      category: 'Business',
+      title: 'Create & Earn',
+      description: 'The complete guide to building a profitable and thriving filmmaking career.',
+      features: ['Determine your business model', 'Lock in long-term clients', 'Price your jobs right', 'Monetize your platform'],
+      price: '$349',
+      image: IMAGES.hero2,
     },
     {
-      icon: '🎭',
-      title: 'Producing & Distribution',
-      duration: '6 Months',
-      description: 'Learn the business of film. From pitch to premiere, navigate the industry with confidence.',
-      features: ['Film financing', 'Distribution strategies', 'Festival submissions', 'Marketing & PR'],
+      category: 'Post-Production',
+      title: 'Perfect Cut',
+      description: 'An expert\'s guide to fast, flawless, and captivating editing.',
+      features: ['Project organization', 'Efficient editing system', 'From footage to delivery', 'Sound design basics'],
+      price: '$349',
+      image: IMAGES.hero3,
     },
     {
-      icon: '📱',
-      title: 'Digital Content Creation',
-      duration: '6 Months',
-      description: 'Create compelling content for the digital age. Short films, web series, and social storytelling.',
-      features: ['Short-form storytelling', 'Platform optimization', 'Audience building', 'Monetization'],
+      category: 'Business',
+      title: 'Producing Foundations',
+      description: 'Start, fund, manage, and deliver commercial and documentary projects.',
+      features: ['Budget templates', 'Pitch like a pro', 'Deliver on budget & time', 'Client management'],
+      price: '$399',
+      image: IMAGES.hero1,
     },
   ];
 
   return (
-    <section id="programs" className="py-24 md:py-32 bg-[#0D0D15] relative">
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#D4A843]/5 rounded-full blur-[150px]"></div>
-      </div>
-      <div className="max-w-7xl mx-auto px-6 relative">
+    <section id="courses" className="py-20 md:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Programs</p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Find Your <span className="gold-gradient-text">Path</span>
-          </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Six immersive programs designed to empower your life with the skills, confidence, and network to succeed in film and beyond.
-          </p>
+          <p className="text-sm tracking-[0.2em] uppercase text-gray-500 mb-3">Our Programs</p>
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold">Courses That <span className="italic">Empower</span></h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {programs.map((program, i) => (
-            <div key={i} className="card-hover bg-[#14141F] border border-white/5 rounded-2xl p-8 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4A843]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#D4A843]/10 transition-all"></div>
-              <div className="relative">
-                <div className="text-4xl mb-4">{program.icon}</div>
-                <h3 className="font-playfair text-xl font-bold mb-2">{program.title}</h3>
-                <p className="text-[#D4A843] text-sm font-medium mb-3">{program.duration}</p>
-                <p className="text-gray-400 text-sm mb-5 leading-relaxed">{program.description}</p>
-                <ul className="space-y-2">
-                  {program.features.map((feature, j) => (
-                    <li key={j} className="flex items-center gap-2 text-gray-500 text-sm">
-                      <div className="w-1.5 h-1.5 bg-[#D4A843] rounded-full"></div>
-                      {feature}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course, i) => (
+            <div key={i} className="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div className="img-zoom aspect-[4/3] relative">
+                <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                <div className="absolute top-4 left-4">
+                  <span className="bg-white/90 backdrop-blur-sm text-xs font-semibold px-3 py-1 rounded-full">{course.category}</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                <p className="text-gray-500 text-sm mb-4 leading-relaxed">{course.description}</p>
+                <ul className="space-y-2 mb-6">
+                  {course.features.map((f, j) => (
+                    <li key={j} className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="w-1.5 h-1.5 bg-black rounded-full flex-shrink-0"></span>
+                      {f}
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// Impact Section
-function Impact() {
-  return (
-    <section id="impact" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0F] via-[#1A1A2E]/50 to-[#0A0A0F]"></div>
-      <div className="max-w-7xl mx-auto px-6 relative">
-        <div className="text-center mb-16">
-          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Our Impact</p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Empowering <span className="gold-gradient-text">Lives</span> Through Film
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {[
-            {
-              number: '85%',
-              label: 'of students receive life-changing scholarships',
-              icon: '🎓',
-              description: 'Financial barriers should never stop empowerment. We invest in lives.',
-            },
-            {
-              number: '340+',
-              label: 'lives transformed through filmmaking',
-              icon: '🏆',
-              description: 'Our graduates are building careers, confidence, and communities.',
-            },
-            {
-              number: '100%',
-              label: 'commitment to empowering every voice',
-              icon: '🌍',
-              description: 'Every background, every identity, every dream — empowered here.',
-            },
-          ].map((item, i) => (
-            <div key={i} className="text-center p-8 bg-[#14141F]/50 border border-white/5 rounded-2xl backdrop-blur-sm">
-              <div className="text-5xl mb-4">{item.icon}</div>
-              <div className="text-4xl md:text-5xl font-bold text-[#D4A843] mb-2 font-playfair">{item.number}</div>
-              <p className="text-white font-medium mb-3">{item.label}</p>
-              <p className="text-gray-500 text-sm">{item.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Empowerment pillars */}
-        <div className="grid md:grid-cols-4 gap-6">
-          {[
-            { title: 'Empowerment', desc: 'Building confidence and self-belief', icon: '💪' },
-            { title: 'Access', desc: 'Equipment, studios, and tools provided', icon: '🔑' },
-            { title: 'Mentorship', desc: '1-on-1 guidance that transforms lives', icon: '🤝' },
-            { title: 'Community', desc: 'A global network that lifts you up', icon: '🌐' },
-          ].map((pillar, i) => (
-            <div key={i} className="text-center p-6 rounded-xl border border-[#D4A843]/20 bg-[#D4A843]/5 hover:bg-[#D4A843]/10 transition-all">
-              <div className="text-3xl mb-3">{pillar.icon}</div>
-              <h4 className="font-bold text-[#D4A843] mb-1">{pillar.title}</h4>
-              <p className="text-gray-500 text-sm">{pillar.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// Testimonials / Voices Section
-function Voices() {
-  const testimonials = [
-    {
-      name: 'Amara Okafor',
-      role: 'Documentary Filmmaker, Class of 2022',
-      quote: 'Kaka didn\'t just teach me to make films — they empowered my entire life. They taught me my story was worth telling. My documentary premiered at Sundance last year.',
-      avatar: '👩🏾‍🦱',
-    },
-    {
-      name: 'Carlos Rivera',
-      role: 'Director, Class of 2021',
-      quote: 'Growing up, I never saw people like me in film. Kaka Film Academy gave me the confidence to be behind the camera, creating the representation I always needed.',
-      avatar: '👨🏽',
-    },
-    {
-      name: 'Priya Sharma',
-      role: 'Cinematographer, Class of 2023',
-      quote: 'The scholarship changed my life. The mentorship empowered my career. The community transformed my soul. Kaka Film Academy is family.',
-      avatar: '👩🏽',
-    },
-    {
-      name: 'Jordan Mitchell',
-      role: 'Producer, Class of 2020',
-      quote: 'I came to Kaka with nothing but a dream. I left empowered — with a network, a career, and the unshakeable belief that my life has purpose.',
-      avatar: '👨🏿',
-    },
-  ];
-
-  return (
-    <section id="voices" className="py-24 md:py-32 bg-[#0D0D15] relative">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Voices of Kaka</p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Lives <span className="gold-gradient-text">Empowered</span>
-          </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Hear from the lives transformed at Kaka Film Academy — people who found their voice, their purpose, and their power.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {testimonials.map((testimonial, i) => (
-            <div key={i} className="bg-[#14141F] border border-white/5 rounded-2xl p-8 relative card-hover">
-              <div className="absolute top-6 right-8 text-[#D4A843]/20 text-6xl font-playfair">"</div>
-              <div className="relative">
-                <p className="text-gray-300 text-lg leading-relaxed mb-6 italic">
-                  "{testimonial.quote}"
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4A843]/20 to-[#D4A843]/5 flex items-center justify-center text-2xl">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <p className="font-bold text-white">{testimonial.name}</p>
-                    <p className="text-[#D4A843] text-sm">{testimonial.role}</p>
-                  </div>
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <span className="text-2xl font-bold">{course.price}</span>
+                  <button className="px-5 py-2 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-all">
+                    Enroll Now
+                  </button>
                 </div>
               </div>
             </div>
@@ -416,57 +316,31 @@ function Voices() {
   );
 }
 
-// Faculty Section
-function Faculty() {
-  const faculty = [
-    {
-      name: 'Director Ava Chen',
-      specialty: 'Directing & Vision',
-      bio: 'Award-winning director with 15+ years in narrative and documentary film.',
-      emoji: '👩🏻‍🦰',
-    },
-    {
-      name: 'Marcus Williams',
-      specialty: 'Cinematography',
-      bio: 'ASC member whose work has been featured at Cannes and TIFF.',
-      emoji: '👨🏿‍🦲',
-    },
-    {
-      name: 'Fatima Al-Rashid',
-      specialty: 'Documentary',
-      bio: 'Emmy-nominated documentarian focused on social justice storytelling.',
-      emoji: '👩🏽‍🦱',
-    },
-    {
-      name: 'Kenji Tanaka',
-      specialty: 'Post-Production',
-      bio: 'Veteran editor who has cut features for major studios and independents alike.',
-      emoji: '👨🏻',
-    },
+// Features Section
+function Features() {
+  const features = [
+    { icon: '📚', title: 'In-depth guided teaching', desc: '500+ video lessons across comprehensive courses. Each lesson designed to empower your growth.' },
+    { icon: '🕐', title: '24/7 access to content', desc: 'Learn at your own pace, anytime, anywhere. All content available on demand.' },
+    { icon: '📞', title: 'Live monthly calls', desc: 'Interact with industry experts, ask questions, and get real-time feedback.' },
+    { icon: '🌍', title: 'Empowering community', desc: 'Connect with fellow creators, share insights, and collaborate on projects.' },
+    { icon: '🏅', title: 'Certifications & awards', desc: 'Earn certifications that showcase your achievements and enhance your profile.' },
+    { icon: '🎯', title: 'Personal coaching', desc: 'Tailored guidance from mentors to help you sharpen skills and reach goals.' },
   ];
 
   return (
-    <section id="faculty" className="py-24 md:py-32 relative">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="features" className="py-20 md:py-28 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
-          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Faculty & Mentors</p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Learn From the <span className="gold-gradient-text">Best</span>
-          </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Our faculty are not just teachers — they're working filmmakers who are passionate about empowering lives and lifting up the next generation.
-          </p>
+          <p className="text-sm tracking-[0.2em] uppercase text-gray-500 mb-3">Why Kaka</p>
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold">Everything You Need to <span className="italic">Rise</span></h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {faculty.map((member, i) => (
-            <div key={i} className="text-center p-6 bg-[#14141F] border border-white/5 rounded-2xl card-hover group">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#D4A843]/20 to-[#D4A843]/5 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform">
-                {member.emoji}
-              </div>
-              <h4 className="font-bold text-white mb-1">{member.name}</h4>
-              <p className="text-[#D4A843] text-sm font-medium mb-3">{member.specialty}</p>
-              <p className="text-gray-500 text-sm">{member.bio}</p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {features.map((feature, i) => (
+            <div key={i} className="text-center">
+              <div className="text-4xl mb-4">{feature.icon}</div>
+              <h4 className="text-lg font-bold mb-2">{feature.title}</h4>
+              <p className="text-gray-500 text-sm leading-relaxed">{feature.desc}</p>
             </div>
           ))}
         </div>
@@ -475,103 +349,258 @@ function Faculty() {
   );
 }
 
-// CTA / Apply Section
-function Apply() {
+// Student Success Stories
+function SuccessStories() {
+  const stories = [
+    {
+      name: 'Amara O.',
+      quote: '"With Kaka I went from barely any experience to working FULL TIME with a documentary production company!"',
+      avatar: '👩🏾‍🦱',
+    },
+    {
+      name: 'Carlos R.',
+      quote: '"I went from videographer to storyteller and filmmaker with Kaka. I\'ve learned how to make more money and separate myself."',
+      avatar: '👨🏽',
+    },
+  ];
+
   return (
-    <section id="apply" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] via-[#0A0A0F] to-[#1A1A2E]"></div>
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#D4A843]/5 rounded-full blur-[200px]"></div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 text-center relative">
-        <div className="text-6xl mb-6">🎬</div>
-        <h2 className="font-playfair text-4xl md:text-6xl font-bold mb-6">
-          Your Life Deserves to<br />
-          <span className="gold-gradient-text">Be Empowered</span>
-        </h2>
-        <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-          Applications for our next cohort are now open. Scholarships available. No experience necessary — just the courage to begin your journey of empowerment.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <a href="#" className="px-10 py-4 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-bold rounded-full text-lg hover:shadow-xl hover:shadow-[#D4A843]/30 transition-all">
-            Apply for Next Cohort
-          </a>
-          <a href="#" className="px-10 py-4 border-2 border-[#D4A843]/50 text-[#D4A843] font-semibold rounded-full text-lg hover:bg-[#D4A843]/10 transition-all">
-            Request Info Pack
-          </a>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-          {[
-            { label: 'Application Fee', value: 'FREE' },
-            { label: 'Next Deadline', value: 'Mar 15' },
-            { label: 'Cohort Size', value: '30 Students' },
-            { label: 'Start Date', value: 'June 2026' },
-          ].map((item, i) => (
-            <div key={i} className="bg-[#14141F]/80 border border-white/5 rounded-xl p-4">
-              <p className="text-[#D4A843] font-bold text-lg">{item.value}</p>
-              <p className="text-gray-500 text-xs mt-1">{item.label}</p>
+    <section className="py-20 md:py-28 bg-white">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12">
+          {stories.map((story, i) => (
+            <div key={i} className="bg-gray-50 rounded-2xl p-8">
+              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-3xl mb-4">
+                {story.avatar}
+              </div>
+              <p className="text-sm text-gray-500 mb-2">{story.name}'s success:</p>
+              <p className="text-gray-800 text-lg leading-relaxed mb-4 italic">{story.quote}</p>
+              <p className="text-sm font-semibold">— {story.name}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+// Student Work Gallery
+function Gallery() {
+  const works = [
+    { title: 'Voices Unheard', author: 'Amara Okafor', type: 'Documentary', image: IMAGES.hero1 },
+    { title: 'City of Dreams', author: 'Carlos Rivera', type: 'Documentary', image: IMAGES.aerial },
+    { title: 'The Craft', author: 'Priya Sharma', type: 'Commercial', image: IMAGES.directing },
+    { title: 'Golden Hour', author: 'Jordan Mitchell', type: 'Short Film', image: IMAGES.student },
+    { title: 'Rising Tides', author: 'Fatima Al-Rashid', type: 'Documentary', image: IMAGES.hero2 },
+    { title: 'Street Stories', author: 'Kenji Tanaka', type: 'Campaign', image: IMAGES.hero3 },
+  ];
+
+  return (
+    <section id="gallery" className="py-20 md:py-28 bg-black text-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <p className="text-sm tracking-[0.2em] uppercase text-gray-400 mb-3">Student Work</p>
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold">Empowered <span className="italic">Creations</span></h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {works.map((work, i) => (
+            <div key={i} className="img-zoom group relative aspect-video rounded-xl overflow-hidden cursor-pointer">
+              <img src={work.image} alt={work.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <span className="text-xs text-gray-300">[{String(i + 1).padStart(2, '0')}]</span>
+                <h4 className="text-lg font-bold">{work.title}</h4>
+                <p className="text-sm text-gray-300">{work.author} — {work.type}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Pricing Section
+function Pricing() {
+  return (
+    <section id="pricing" className="py-20 md:py-28 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <p className="text-sm tracking-[0.2em] uppercase text-gray-500 mb-3">Pricing</p>
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold">Invest in <span className="italic">Yourself</span></h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Payment Plan */}
+          <div className="border border-gray-200 rounded-2xl p-8">
+            <p className="text-sm font-semibold text-gray-500 mb-2">Payment Plan</p>
+            <p className="text-sm text-gray-400 mb-4">Starting at</p>
+            <p className="text-4xl font-bold mb-1">$95<span className="text-lg text-gray-400">/mo</span></p>
+            <p className="text-sm text-gray-500 mb-6">No subscription — Lifetime Access</p>
+            <ul className="space-y-3 mb-8">
+              {['Live Monthly Expert Calls', 'Global Filmmaking Community', 'Personal Coaching', 'Lifetime Access to Updates'].map((item, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-black">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+            <button className="w-full py-3 border-2 border-black text-black font-semibold rounded-full hover:bg-black hover:text-white transition-all">
+              Get Started
+            </button>
+          </div>
+
+          {/* Individual Course */}
+          <div className="border-2 border-black rounded-2xl p-8 relative">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-bold px-4 py-1 rounded-full">POPULAR</div>
+            <p className="text-sm font-semibold text-gray-500 mb-2">Individual Course</p>
+            <p className="text-sm text-gray-400 mb-4">Starting at</p>
+            <p className="text-4xl font-bold mb-1">$299</p>
+            <p className="text-sm text-gray-500 mb-6">Choose Individual Courses</p>
+            <ul className="space-y-3 mb-8">
+              {['Live Monthly Expert Calls', 'Global Filmmaking Community', 'Personal Coaching', 'Lifetime Access to Updates'].map((item, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-black">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+            <button className="w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-all">
+              Get Started
+            </button>
+          </div>
+
+          {/* Bundle */}
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8">
+            <p className="text-sm font-semibold text-gray-500 mb-2">Best Value</p>
+            <p className="text-sm text-gray-400 mb-4">Up to</p>
+            <p className="text-4xl font-bold mb-1">40% <span className="text-lg text-gray-400">OFF</span></p>
+            <p className="text-sm text-gray-500 mb-6">Save up to $800+ when you bundle</p>
+            <ul className="space-y-3 mb-8">
+              {['All Courses Included', 'Global Filmmaking Community', 'Priority Personal Coaching', 'Lifetime Access + Updates'].map((item, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="text-black">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+            <button className="w-full py-3 border-2 border-black text-black font-semibold rounded-full hover:bg-black hover:text-white transition-all">
+              Get Bundle
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Waitlist / CTA Section
+function Waitlist() {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) setSubmitted(true);
+  };
+
+  return (
+    <section id="apply" className="py-20 md:py-28 bg-gray-50">
+      <div className="max-w-3xl mx-auto px-6 text-center">
+        <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4">
+          Get <span className="italic">20% off</span> when doors open
+        </h2>
+        <p className="text-gray-500 text-lg mb-10">
+          Join the waitlist and we'll send your discount the moment enrollment's live.
+        </p>
+
+        {submitted ? (
+          <div className="bg-white rounded-2xl p-8 border border-gray-100">
+            <div className="text-4xl mb-3">🎬</div>
+            <p className="text-xl font-bold mb-2">Welcome to Kaka!</p>
+            <p className="text-gray-500">We'll be in touch soon with your exclusive discount.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <input type="text" placeholder="First Name" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-black transition-colors" />
+              <input type="text" placeholder="Last Name" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-black transition-colors" />
+            </div>
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-black transition-colors mb-4"
+              required
+            />
+            <button type="submit" className="w-full py-3.5 bg-black text-white font-semibold rounded-xl hover:bg-gray-800 transition-all">
+              Join the Waitlist
+            </button>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// Marquee
+function Marquee() {
+  const items = ['EMPOWERING LIVES', '★', 'STORYTELLING', '★', 'FILMMAKING', '★', 'COMMUNITY', '★', 'DOCUMENTARY', '★', 'CINEMATOGRAPHY', '★'];
+  return (
+    <div className="bg-black text-white py-4 overflow-hidden">
+      <div className="animate-marquee whitespace-nowrap flex">
+        {[...items, ...items].map((item, i) => (
+          <span key={i} className="mx-6 text-sm font-semibold tracking-wider">{item}</span>
+        ))}
+      </div>
+    </div>
   );
 }
 
 // Footer
 function Footer() {
   return (
-    <footer className="bg-[#0A0A0F] border-t border-white/5 py-16">
+    <footer className="bg-white border-t border-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-10 mb-12">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4A843] to-[#F0D078] flex items-center justify-center">
-                <span className="text-black font-bold text-lg">K</span>
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">K</span>
               </div>
-              <span className="font-playfair text-2xl font-bold">KAKA</span>
+              <span className="font-bold text-lg">KAKA</span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Empowering lives through the art of filmmaking. Every story matters, every voice counts.
+              Empowering lives through the art of filmmaking. Every story matters.
             </p>
           </div>
-
           <div>
-            <h4 className="font-bold text-white mb-4">Programs</h4>
+            <h4 className="font-bold text-sm mb-4">Courses</h4>
             <ul className="space-y-2">
-              {['Directing', 'Cinematography', 'Documentary', 'Editing', 'Producing', 'Digital Content'].map((item, i) => (
-                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-[#D4A843] transition-colors">{item}</a></li>
+              {['Documentary Foundations', 'Advanced Documentary', 'The Cinematic Eye', 'Perfect Cut', 'Create & Earn', 'Producing'].map((item, i) => (
+                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-black transition-colors">{item}</a></li>
               ))}
             </ul>
           </div>
-
           <div>
-            <h4 className="font-bold text-white mb-4">Academy</h4>
+            <h4 className="font-bold text-sm mb-4">Academy</h4>
             <ul className="space-y-2">
-              {['About Us', 'Our Mission', 'Faculty', 'Alumni', 'Partners', 'Careers'].map((item, i) => (
-                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-[#D4A843] transition-colors">{item}</a></li>
+              {['About Us', 'Our Mission', 'Student Work', 'Community', 'Blog', 'Careers'].map((item, i) => (
+                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-black transition-colors">{item}</a></li>
               ))}
             </ul>
           </div>
-
           <div>
-            <h4 className="font-bold text-white mb-4">Connect</h4>
+            <h4 className="font-bold text-sm mb-4">Connect</h4>
             <ul className="space-y-2">
               {['Instagram', 'YouTube', 'Twitter/X', 'LinkedIn', 'Newsletter', 'Contact'].map((item, i) => (
-                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-[#D4A843] transition-colors">{item}</a></li>
+                <li key={i}><a href="#" className="text-gray-500 text-sm hover:text-black transition-colors">{item}</a></li>
               ))}
             </ul>
           </div>
         </div>
-
-        <div className="section-divider mb-8"></div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">© 2026 Kaka Film Academy. All rights reserved.</p>
-          <p className="text-gray-600 text-sm italic">"Empowering lives, one story at a time."</p>
+        <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 text-sm">© 2026 Kaka Film Academy. All rights reserved.</p>
+          <p className="text-gray-400 text-sm italic">"Empowering lives, one story at a time."</p>
         </div>
       </div>
     </footer>
@@ -581,21 +610,18 @@ function Footer() {
 // Main App
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white">
+    <div className="min-h-screen bg-white text-black">
       <Navbar />
       <Hero />
-      <div className="section-divider"></div>
-      <About />
-      <div className="section-divider"></div>
-      <Programs />
-      <div className="section-divider"></div>
-      <Impact />
-      <div className="section-divider"></div>
-      <Voices />
-      <div className="section-divider"></div>
-      <Faculty />
-      <div className="section-divider"></div>
-      <Apply />
+      <Marquee />
+      <EvenIf />
+      <Stats />
+      <Courses />
+      <Features />
+      <SuccessStories />
+      <Gallery />
+      <Pricing />
+      <Waitlist />
       <Footer />
     </div>
   );
