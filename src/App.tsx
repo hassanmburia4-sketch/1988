@@ -16,9 +16,9 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4A843] to-[#F0D078] flex items-center justify-center">
-            <span className="text-black font-bold text-lg">R</span>
+            <span className="text-black font-bold text-lg">K</span>
           </div>
-          <span className="font-playfair text-2xl font-bold tracking-wide">RISE</span>
+          <span className="font-playfair text-2xl font-bold tracking-wide">KAKA</span>
         </a>
 
         <div className="hidden md:flex items-center gap-8">
@@ -84,18 +84,18 @@ function Hero() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div className="animate-fade-in-up">
           <p className="text-[#D4A843] font-medium tracking-[0.3em] uppercase text-sm mb-6">
-            Empowering Voices Through Cinema
+            Empowering Lives Through Film
           </p>
         </div>
 
         <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-8 animate-fade-in-up delay-200">
-          Your Story.<br />
-          <span className="gold-gradient-text">Your Power.</span><br />
-          Your Film.
+          Empower<br />
+          <span className="gold-gradient-text">Your Life.</span><br />
+          Tell Your Story.
         </h1>
 
         <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-300 leading-relaxed">
-          We believe every voice deserves to be heard. RISE Film Academy empowers underrepresented filmmakers to tell stories that transform the world.
+          Kaka Film Academy is more than a school — it's a movement. We empower lives by giving every aspiring filmmaker the tools, mentorship, and confidence to turn their vision into reality.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400">
@@ -142,20 +142,20 @@ function About() {
           <div>
             <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Our Mission</p>
             <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Cinema is a <span className="gold-gradient-text">Right</span>, Not a Privilege
+              Empowering Lives, <span className="gold-gradient-text">One Story</span> at a Time
             </h2>
             <p className="text-gray-400 text-lg leading-relaxed mb-6">
-              For too long, the film industry has been gatekept by those with resources and connections. RISE Film Academy exists to tear down those barriers.
+              At Kaka Film Academy, we believe filmmaking has the power to transform lives — both the lives of those who create and those who watch. We exist to unlock that power in everyone.
             </p>
             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-              We provide world-class filmmaking education, mentorship from industry professionals, and the tools needed to bring your vision to life — regardless of your background, identity, or zip code.
+              Through world-class education, hands-on mentorship, and unwavering support, we empower individuals from all walks of life to discover their voice, build their confidence, and create films that make a difference.
             </p>
             <div className="space-y-4">
               {[
-                'Scholarship-first admissions — financial barriers eliminated',
-                'Industry mentors paired with every student',
+                'Life-changing scholarships — financial barriers eliminated',
+                'Personal mentors paired with every student',
                 'State-of-the-art equipment access from day one',
-                'Global community of empowered storytellers',
+                'A global community that empowers and uplifts',
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#D4A843]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -175,8 +175,8 @@ function About() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8">
                   <div className="text-6xl mb-4">🎬</div>
-                  <p className="font-playfair text-2xl font-bold text-[#D4A843] mb-2">"Every story matters"</p>
-                  <p className="text-gray-500 text-sm">— RISE Film Academy</p>
+                  <p className="font-playfair text-2xl font-bold text-[#D4A843] mb-2">"Empowering Lives"</p>
+                  <p className="text-gray-500 text-sm">— Kaka Film Academy</p>
                 </div>
               </div>
               {/* Decorative elements */}
@@ -253,7 +253,7 @@ function Programs() {
             Find Your <span className="gold-gradient-text">Path</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Six immersive programs designed to empower you with the skills, confidence, and network to succeed in film.
+            Six immersive programs designed to empower your life with the skills, confidence, and network to succeed in film and beyond.
           </p>
         </div>
 
@@ -292,7 +292,7 @@ function Impact() {
         <div className="text-center mb-16">
           <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Our Impact</p>
           <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Transforming <span className="gold-gradient-text">Lives</span> Through Film
+            Empowering <span className="gold-gradient-text">Lives</span> Through Film
           </h2>
         </div>
 
@@ -300,21 +300,21 @@ function Impact() {
           {[
             {
               number: '85%',
-              label: 'of students receive full scholarships',
+              label: 'of students receive life-changing scholarships',
               icon: '🎓',
-              description: 'Financial barriers should never silence a story. We fund dreams.',
+              description: 'Financial barriers should never stop empowerment. We invest in lives.',
             },
             {
               number: '340+',
-              label: 'films screened at festivals worldwide',
+              label: 'lives transformed through filmmaking',
               icon: '🏆',
-              description: 'Our students are winning awards and telling stories that matter.',
+              description: 'Our graduates are building careers, confidence, and communities.',
             },
             {
               number: '100%',
-              label: 'commitment to diverse voices',
+              label: 'commitment to empowering every voice',
               icon: '🌍',
-              description: 'Every background, every identity, every story — welcome here.',
+              description: 'Every background, every identity, every dream — empowered here.',
             },
           ].map((item, i) => (
             <div key={i} className="text-center p-8 bg-[#14141F]/50 border border-white/5 rounded-2xl backdrop-blur-sm">
@@ -329,10 +329,10 @@ function Impact() {
         {/* Empowerment pillars */}
         <div className="grid md:grid-cols-4 gap-6">
           {[
+            { title: 'Empowerment', desc: 'Building confidence and self-belief', icon: '💪' },
             { title: 'Access', desc: 'Equipment, studios, and tools provided', icon: '🔑' },
-            { title: 'Mentorship', desc: '1-on-1 guidance from industry pros', icon: '🤝' },
-            { title: 'Community', desc: 'A global network of empowered creators', icon: '🌐' },
-            { title: 'Opportunity', desc: 'Festival submissions & industry connections', icon: '🚀' },
+            { title: 'Mentorship', desc: '1-on-1 guidance that transforms lives', icon: '🤝' },
+            { title: 'Community', desc: 'A global network that lifts you up', icon: '🌐' },
           ].map((pillar, i) => (
             <div key={i} className="text-center p-6 rounded-xl border border-[#D4A843]/20 bg-[#D4A843]/5 hover:bg-[#D4A843]/10 transition-all">
               <div className="text-3xl mb-3">{pillar.icon}</div>
@@ -352,25 +352,25 @@ function Voices() {
     {
       name: 'Amara Okafor',
       role: 'Documentary Filmmaker, Class of 2022',
-      quote: 'RISE didn\'t just teach me to make films — they taught me my story was worth telling. My documentary premiered at Sundance last year.',
+      quote: 'Kaka didn\'t just teach me to make films — they empowered my entire life. They taught me my story was worth telling. My documentary premiered at Sundance last year.',
       avatar: '👩🏾‍🦱',
     },
     {
       name: 'Carlos Rivera',
       role: 'Director, Class of 2021',
-      quote: 'Growing up, I never saw people like me in film. Now I\'m behind the camera, creating the representation I always needed.',
+      quote: 'Growing up, I never saw people like me in film. Kaka Film Academy gave me the confidence to be behind the camera, creating the representation I always needed.',
       avatar: '👨🏽',
     },
     {
       name: 'Priya Sharma',
       role: 'Cinematographer, Class of 2023',
-      quote: 'The scholarship changed my life. The mentorship changed my career. The community changed my soul. I am forever grateful.',
+      quote: 'The scholarship changed my life. The mentorship empowered my career. The community transformed my soul. Kaka Film Academy is family.',
       avatar: '👩🏽',
     },
     {
       name: 'Jordan Mitchell',
       role: 'Producer, Class of 2020',
-      quote: 'I came to RISE with nothing but a dream. I left with a network, a career, and the unshakeable belief that I belong in this industry.',
+      quote: 'I came to Kaka with nothing but a dream. I left empowered — with a network, a career, and the unshakeable belief that my life has purpose.',
       avatar: '👨🏿',
     },
   ];
@@ -379,12 +379,12 @@ function Voices() {
     <section id="voices" className="py-24 md:py-32 bg-[#0D0D15] relative">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Voices of RISE</p>
+          <p className="text-[#D4A843] font-medium tracking-[0.2em] uppercase text-sm mb-4">Voices of Kaka</p>
           <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-            Stories of <span className="gold-gradient-text">Empowerment</span>
+            Lives <span className="gold-gradient-text">Empowered</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Hear from the filmmakers who found their voice, their power, and their purpose at RISE.
+            Hear from the lives transformed at Kaka Film Academy — people who found their voice, their purpose, and their power.
           </p>
         </div>
 
@@ -452,7 +452,7 @@ function Faculty() {
             Learn From the <span className="gold-gradient-text">Best</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Our faculty are not just teachers — they're working filmmakers who are passionate about lifting up the next generation.
+            Our faculty are not just teachers — they're working filmmakers who are passionate about empowering lives and lifting up the next generation.
           </p>
         </div>
 
@@ -485,11 +485,11 @@ function Apply() {
       <div className="max-w-4xl mx-auto px-6 text-center relative">
         <div className="text-6xl mb-6">🎬</div>
         <h2 className="font-playfair text-4xl md:text-6xl font-bold mb-6">
-          Your Story Deserves to<br />
-          <span className="gold-gradient-text">Be Told</span>
+          Your Life Deserves to<br />
+          <span className="gold-gradient-text">Be Empowered</span>
         </h2>
         <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-          Applications for our next cohort are now open. Scholarships available. No experience necessary — just passion, purpose, and the courage to begin.
+          Applications for our next cohort are now open. Scholarships available. No experience necessary — just the courage to begin your journey of empowerment.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -528,12 +528,12 @@ function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4A843] to-[#F0D078] flex items-center justify-center">
-                <span className="text-black font-bold text-lg">R</span>
+                <span className="text-black font-bold text-lg">K</span>
               </div>
-              <span className="font-playfair text-2xl font-bold">RISE</span>
+              <span className="font-playfair text-2xl font-bold">KAKA</span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Empowering the next generation of filmmakers to tell stories that change the world.
+              Empowering lives through the art of filmmaking. Every story matters, every voice counts.
             </p>
           </div>
 
@@ -568,8 +568,8 @@ function Footer() {
         <div className="section-divider mb-8"></div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">© 2026 RISE Film Academy. All rights reserved.</p>
-          <p className="text-gray-600 text-sm italic">"Every voice deserves a stage."</p>
+          <p className="text-gray-600 text-sm">© 2026 Kaka Film Academy. All rights reserved.</p>
+          <p className="text-gray-600 text-sm italic">"Empowering lives, one story at a time."</p>
         </div>
       </div>
     </footer>
