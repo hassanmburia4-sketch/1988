@@ -44,13 +44,15 @@ function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden bg-[#0A0A0F]/98 backdrop-blur-md border-t border-white/10 px-6 py-6 space-y-4">
-          <a href="#about" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-[#D4A843]">About</a>
-          <a href="#programs" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-[#D4A843]">Programs</a>
-          <a href="#impact" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-[#D4A843]">Impact</a>
-          <a href="#voices" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-[#D4A843]">Voices</a>
-          <a href="#faculty" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-[#D4A843]">Faculty</a>
-          <a href="#apply" className="block px-6 py-2.5 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-semibold rounded-full text-sm text-center">Apply Now</a>
+        <div className="md:hidden bg-[#0A0A0F]/98 backdrop-blur-md border-t border-white/10 px-6 py-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+            <a href="#about" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">About</a>
+            <a href="#programs" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Programs</a>
+            <a href="#impact" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Impact</a>
+            <a href="#voices" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Voices</a>
+            <a href="#faculty" onClick={() => setMobileOpen(false)} className="text-sm text-gray-300 hover:text-[#D4A843] transition-colors whitespace-nowrap">Faculty</a>
+            <a href="#apply" className="px-5 py-2 bg-gradient-to-r from-[#D4A843] to-[#F0D078] text-black font-semibold rounded-full text-sm whitespace-nowrap">Apply Now</a>
+          </div>
         </div>
       )}
     </nav>
